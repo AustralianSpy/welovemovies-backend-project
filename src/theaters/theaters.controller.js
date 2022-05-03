@@ -1,16 +1,17 @@
 const service = require('./theaters.service');
 const asyncErrorBoundary =  require('../errors/asyncErrorBoundary');
 
-/*
-    TODO: currently returns a list of all theaters.
-    Must also request a list of ALL MOVIES playing at the theater,
-    add a key of 'movies' to the 'theaters' response, and reduce
-    the 'movies' response down to an array that is added to the theater
-    response.
-*/
 async function list(req, res) {
-    const data = await service.list();
-    res.json({ data });
+    // Request list of all theaters.
+    const theaters = await service.list();
+
+    // For each theater, request list of movies playing at theater.
+    // Add array to theater object with key 'movies'.
+    for (let theater of theaters) {
+        const movies = await service.listShowingMovies(theater.theater_id);
+        theater['movies'] = movies;
+    }
+    res.json({ data: theaters });
 }
 
 module.exports = {
