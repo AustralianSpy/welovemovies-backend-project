@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
+const cors = require('cors');
+
 
 // TODO: require routers here.
 const notFound = require('./errors/notFound');
 const errorHandler = require('./errors/errorHandler');
 
+// App:
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 // TODO: Routers here.
