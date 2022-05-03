@@ -1,11 +1,11 @@
 const knex = require('../db/connection');
 
-// Fetches list of all movies.
+// List of all movies.
 function list() {
     return knex('movies').select('*');
 }
 
-// Function listing only movies currently showing.
+// Lists only movies currently showing.
 // References movies_theaters join table.
 // Must be distinct to prevent per-theater duplicants.
 function listShowing() {
@@ -16,7 +16,16 @@ function listShowing() {
         .where('mt.is_showing', true);
 }
 
+// Responds with all information about a single movie, given an id.
+function read(movieId) {
+    return knex('movies')
+        .select('*')
+        .where({ movie_id: movieId })
+        .first();
+}
+
 module.exports = {
     list,
     listShowing,
+    read,
 }
