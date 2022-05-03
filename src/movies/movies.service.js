@@ -24,6 +24,11 @@ function read(movieId) {
         .first();
 }
 
+// TODO: retrieve list of theaters where a movie is playing, given an id.
+
+
+// TODO: retrieve list of reviews for a movie, given an id. Must include critic details.
+
 module.exports = {
     list,
     listShowing,

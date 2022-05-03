@@ -34,10 +34,28 @@ async function read(req, res) {
     res.json({ data: movie });
 }
 
+// TODO: Returns list of all theaters where a movie is showing.
+async function listTheaters(req, res, next) {
+    return;
+}
+
+// TODO: Returns list of all rewviews for a movie.
+async function listReviews(req, res, next) {
+    return;
+}
+
 module.exports = {
     list: asyncErrorBoundary(list),
     read: [
         asyncErrorBoundary(movieExists),
         asyncErrorBoundary(read),
+    ],
+    listTheaters: [
+        asyncErrorBoundary(movieExists),
+        asyncErrorBoundary(listTheaters),
+    ],
+    listReviews: [
+        asyncErrorBoundary(movieExists),
+        asyncErrorBoundary(listReviews),
     ],
 };
