@@ -41,9 +41,20 @@ async function listTheaters(req, res, next) {
     res.json({ data: theaters });
 }
 
-// TODO: Returns list of all rewviews for a movie.
-async function listReviews(req, res, next) {
-    return;
+// TODO: Returns list of all reviews for a movie.
+async function listReviews(req, res) {
+    const { movie } = res.locals;
+    
+    // Request list of all reviews.
+    const reviews = await service.listReviews(movie.movie_id);
+
+    // For each review, request information of associated critic.
+    // Add array to review object with key 'critic'.
+    for (let review of reviews) {
+        const critic = await service.listCritics(review.review_id);
+        review['critic'] = critic[0];
+    }
+    res.json({ data: reviews });
 }
 
 module.exports = {

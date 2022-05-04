@@ -35,10 +35,16 @@ function listTheaters(movieId) {
 
 // TODO: retrieve list of reviews for a movie, given an id. Must include critic details.
 function listReviews(movieId) {
-    return knex('movies AS m')
-        .join('reviews AS r', 'm.movie_id', 'r.movie_id')
-        .join('critics AS c', 'r.critic_id', 'c.critic_id')
-        .where({  })
+    return knex('reviews')
+        .select('*')
+        .where({ movie_id: movieId });
+}
+
+function listCritics(reviewId) {
+    return knex('reviews AS r')
+    .join('critics AS c', 'r.critic_id', 'c.critic_id')
+    .select('c.*')
+    .where({ 'r.review_id': reviewId });
 }
 
 module.exports = {
@@ -47,4 +53,5 @@ module.exports = {
     read,
     listTheaters,
     listReviews,
+    listCritics,
 }
