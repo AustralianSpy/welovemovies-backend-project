@@ -1,6 +1,5 @@
 const service = require('./movies.service');
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
-const req = require('express/lib/request');
 
 async function list(req, res) {
     const { is_showing } = req.query;
@@ -24,8 +23,9 @@ async function movieExists(req, res, next) {
     if (movie) {
         res.locals.movie = movie;
         next();
+    } else {
+        return next({ status: 404, message: 'Movie cannot be found.' });
     }
-    return next({ status: 404, message: 'Movie cannot be found.' });
 }
 
 // Return information on a single retrieved movie.
@@ -36,7 +36,9 @@ async function read(req, res) {
 
 // TODO: Returns list of all theaters where a movie is showing.
 async function listTheaters(req, res, next) {
-    return;
+    const { movie } = res.locals;
+    const theaters = await service.listTheaters(movie.movie_id);
+    res.json({ data: theaters });
 }
 
 // TODO: Returns list of all rewviews for a movie.

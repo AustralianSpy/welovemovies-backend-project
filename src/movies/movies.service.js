@@ -25,12 +25,26 @@ function read(movieId) {
 }
 
 // TODO: retrieve list of theaters where a movie is playing, given an id.
-
+function listTheaters(movieId) {
+    return knex('movies AS m')
+        .join('movies_theaters AS mt', 'm.movie_id', 'mt.movie_id')
+        .join('theaters AS t', 'mt.theater_id', 't.theater_id')
+        .select('t.*')
+        .where({ 'mt.movie_id': movieId });
+}
 
 // TODO: retrieve list of reviews for a movie, given an id. Must include critic details.
+function listReviews(movieId) {
+    return knex('movies AS m')
+        .join('reviews AS r', 'm.movie_id', 'r.movie_id')
+        .join('critics AS c', 'r.critic_id', 'c.critic_id')
+        .where({  })
+}
 
 module.exports = {
     list,
     listShowing,
     read,
+    listTheaters,
+    listReviews,
 }
