@@ -31,9 +31,17 @@ function listCritics(critic_id) {
         .then((critics) => critics[0]);
 }
 
+// Delete an existing review.
+function destroy(review_id) {
+    return knex('reviews')
+        .where({ review_id })
+        .del();
+}
+
 module.exports = {
     read,
     update,
     list,
     listCritics,
+    delete: destroy,
 };

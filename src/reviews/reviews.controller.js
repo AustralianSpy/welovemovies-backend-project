@@ -48,11 +48,22 @@ async function update(req, res) {
     res.json({ data: review });
 }
 
+// Function to delete an existing review.
+async function destroy(req, res) {
+    const { review_id } = res.locals.review;
+    await service.delete(review_id);
+    res.sendStatus(204);
+}
+
 
 module.exports = {
     update: [
         asyncErrorBoundary(reviewExists),
         asyncErrorBoundary(hasValidProperties),
         asyncErrorBoundary(update),
+    ],
+    delete: [
+        asyncErrorBoundary(reviewExists),
+        asyncErrorBoundary(destroy),
     ],
 };
