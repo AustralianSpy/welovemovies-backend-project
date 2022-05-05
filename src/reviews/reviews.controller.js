@@ -15,6 +15,12 @@ async function reviewExists(req, res, next) {
 }
 
 // TODO: function to update a review based upon a given id.
+async function update(req, res) {
+    const { review } = res.locals;
+    const updatedReview = req.body;
+    const response = await service.update(updatedReview);
+    
+}
 
 
 module.exports = {

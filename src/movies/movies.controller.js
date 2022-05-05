@@ -1,4 +1,5 @@
-const service = require('./movies.service');
+const movieService = require('./movies.service');
+const reviewService = require('../reviews/reviews.service')
 const asyncErrorBoundary = require('../errors/asyncErrorBoundary');
 
 async function list(req, res) {
@@ -7,10 +8,10 @@ async function list(req, res) {
     // Above checks if there is a query for movies that are showing
     // (true). If so, call listShowing query. Otherwise, return all.
     if (is_showing) {
-        const movies = await service.listShowing();
+        const movies = await movieService.listShowing();
         return res.json({ data: movies });
     } else {
-        const movies = await service.list();
+        const movies = await movieService.list();
         return res.json({ data: movies });
     }
 }
@@ -19,7 +20,7 @@ async function list(req, res) {
 async function movieExists(req, res, next) {
     const { movieId } = req.params;
 
-    const movie = await service.read(movieId);
+    const movie = await movieService.read(movieId);
     if (movie) {
         res.locals.movie = movie;
         next();
@@ -46,12 +47,12 @@ async function listReviews(req, res) {
     const { movie } = res.locals;
     
     // Request list of all reviews.
-    const reviews = await service.listReviews(movie.movie_id);
+    const reviews = await reviewService.listReviews(movie.movie_id);
 
     // For each review, request information of associated critic.
     // Add array to review object with key 'critic'.
     for (let review of reviews) {
-        const critic = await service.listCritics(review.review_id);
+        const critic = await reviewService.listCritics(review.review_id);
         review['critic'] = critic[0];
     }
     res.json({ data: reviews });
