@@ -1,7 +1,6 @@
 const knex = require('../db/connection');
 
-// TODO: a READ function to locate a review by a given id.
-// Used for middleware function in controller.
+// Locates a review by a given id for middleware function in controller.
 function read(review_id) {
     return knex('reviews')
         .select('*')
@@ -9,27 +8,27 @@ function read(review_id) {
         .first();
 }
 
+// Update a pre-existing review.
 function update(updatedReview) {
     return knex('reviews')
         .select('*')
         .where({ review_id: updatedReview.review_id })
-        .update(updatedReview, '*')
-        .then((updated) => updated[0]);
+        .update(updatedReview);
 }
 
-// TODO: retrieve list of reviews for a movie, given an id. Must include critic details.
+// Retrieve list of reviews for a movie, given an id. Must include critic details.
 function list(movieId) {
     return knex('reviews')
         .select('*')
         .where({ movie_id: movieId });
 }
 
-function listCritics(reviewId) {
-    return knex('reviews AS r')
-    .join('critics AS c', 'r.critic_id', 'c.critic_id')
-    .select('c.*')
-    .where({ 'r.review_id': reviewId })
-    .then((critics) => critics[0]);
+// Retrieve critic associated with a review.
+function listCritics(critic_id) {
+    return knex('critics')
+        .select('*')
+        .where({ critic_id })
+        .then((critics) => critics[0]);
 }
 
 module.exports = {

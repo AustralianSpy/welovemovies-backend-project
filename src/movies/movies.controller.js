@@ -52,7 +52,7 @@ async function listReviews(req, res) {
     // For each review, request information of associated critic.
     // Add array to review object with key 'critic'.
     for (let review of reviews) {
-        const critic = await reviewService.listCritics(review.review_id);
+        const critic = await reviewService.listCritics(review.critic_id);
         review['critic'] = critic;
     }
     res.json({ data: reviews });

@@ -20,7 +20,7 @@ function hasValidProperties(req, res, next) {
     const { data = {} } = req.body;
 
     const invalidProperties = Object.keys(data).filter(
-        (field) => !VALID_PROPERTIES.includes(field)
+        (field) => !VALID_PROPERTIES.includes(field) || !field.length
       );
     
     if (invalidProperties.length) {
@@ -29,14 +29,23 @@ function hasValidProperties(req, res, next) {
     next();
 }
 
-// TODO: function to update a review based upon a given id.
+// Function to update a review based upon a given id.
 async function update(req, res) {
-    const { review } = res.locals;
-    const updatedReview = req.body;
-    const response = await service.update(updatedReview);
-    const critic = await service.listCritics(review.review_id);
-    response['critic'] = critic;
-    res.json({ data: response });
+    const { review_id } = res.locals.review;
+    const updatedReview = {
+        ...req.body.data,
+        'review_id': review_id,
+    };
+    
+    // Process update then request newest version of review
+    // with critic information.
+    await service.update(updatedReview);
+    const response = await service.read(review_id);
+    const review = {
+        ...response,
+        'critic': await service.listCritics(res.locals.review.critic_id),
+    };
+    res.json({ data: review });
 }
 
 
@@ -44,6 +53,6 @@ module.exports = {
     update: [
         asyncErrorBoundary(reviewExists),
         asyncErrorBoundary(hasValidProperties),
-        asyncErrorBoundary(update)
+        asyncErrorBoundary(update),
     ],
 };
