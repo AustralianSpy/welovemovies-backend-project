@@ -28,7 +28,8 @@ function listCritics(reviewId) {
     return knex('reviews AS r')
     .join('critics AS c', 'r.critic_id', 'c.critic_id')
     .select('c.*')
-    .where({ 'r.review_id': reviewId });
+    .where({ 'r.review_id': reviewId })
+    .then((critics) => critics[0]);
 }
 
 module.exports = {

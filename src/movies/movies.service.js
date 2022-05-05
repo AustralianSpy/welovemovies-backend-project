@@ -38,6 +38,4 @@ module.exports = {
     listShowing,
     read,
     listTheaters,
-    listReviews,
-    listCritics,
-}
+};

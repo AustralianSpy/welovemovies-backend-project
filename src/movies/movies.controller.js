@@ -38,7 +38,7 @@ async function read(req, res) {
 // TODO: Returns list of all theaters where a movie is showing.
 async function listTheaters(req, res, next) {
     const { movie } = res.locals;
-    const theaters = await service.listTheaters(movie.movie_id);
+    const theaters = await movieService.listTheaters(movie.movie_id);
     res.json({ data: theaters });
 }
 
@@ -47,13 +47,13 @@ async function listReviews(req, res) {
     const { movie } = res.locals;
     
     // Request list of all reviews.
-    const reviews = await reviewService.listReviews(movie.movie_id);
+    const reviews = await reviewService.list(movie.movie_id);
 
     // For each review, request information of associated critic.
     // Add array to review object with key 'critic'.
     for (let review of reviews) {
         const critic = await reviewService.listCritics(review.review_id);
-        review['critic'] = critic[0];
+        review['critic'] = critic;
     }
     res.json({ data: reviews });
 }
