@@ -13,6 +13,7 @@ const reviewsRouter = require('./reviews/reviews.router');
 // App:
 const app = express();
 app.use(cors());
+app.options('*', cors());
 app.use(express.json());
 
 // TODO: Routers here.
