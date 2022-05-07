@@ -11,7 +11,7 @@ function listShowingMovies(theaterId) {
     return knex('movies_theaters AS mt')
         .join('movies AS m', 'mt.movie_id', 'm.movie_id')
         .where({ 'mt.theater_id': theaterId })
-        .select('m.title', 'm.rating', 'm.runtime_in_minutes')
+        .select('m*')
         .where('mt.is_showing', true)
 }
 
